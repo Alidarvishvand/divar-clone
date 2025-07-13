@@ -5,6 +5,14 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin,
 )
+from django.conf import settings
+
+
+
+
+def user_profile_image_path(instance, filename):
+    return f'profiles/user_{instance.user.id}/{filename}'
+
 
 class UserManager(BaseUserManager):
     """
@@ -59,3 +67,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+    
+    
+    
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='profile')
+    image = models.ImageField(upload_to=user_profile_image_path,blank=True,null=True)
+    location = models.CharField(max_length=250,blank=True)
+    
+    def __str__(self):
+        return f'Profile of {self.user.email}'
