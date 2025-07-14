@@ -4,11 +4,11 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
-from accounts.serializers import RegisterSerializer,CustomTokenObtainPairSerializer,ProfileSerializer
-from rest_framework.authtoken.models import Token
+from accounts.serializers import RegisterSerializer,CustomTokenObtainPairSerializer,ProfileSerializer,ChangePasswordSerializer
+from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 
@@ -56,19 +56,16 @@ class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        return self.logout_user(request)
-
-    def get(self, request):
-        return self.logout_user(request)
-
-    def logout_user(self, request):
         try:
-            request.user.auth_token.delete()
-            return Response({"detail": "Logged out successfully."}, status=status.HTTP_200_OK)
-        except Token.DoesNotExist:
-            return Response({"detail": "Token not found."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        
+            refresh_token = request.data["refresh"]
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response({"detail": "Logout successful"}, status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response({"detail": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
@@ -77,3 +74,23 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user.profile
+    
+    
+
+class ChangePassword(generics.GenericAPIView):
+    serializer_class = ChangePasswordSerializer
+
+    def put(self, request, id):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        old_password = serializer.validated_data['old_password']
+        new_password = serializer.validated_data['new_password']
+
+        user = get_user_model().objects.get(pk=id)
+        if not user.check_password(old_password):
+            return Response({'error': 'رمز فعلی اشتباه است'}, status=400)
+
+        user.set_password(new_password)
+        user.save()
+        return Response({'success': 'رمز با موفقیت تغییر کرد'}, status=200)
