@@ -38,11 +38,11 @@ schema_view = get_schema_view(
 )
 
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('accounts/',include("accounts.urls")),
-    path('api-auth/', include('rest_framework.urls')), 
+    path("accounts/", include("accounts.urls")),
+    path("ctegory/", include("category.urls")),
+    path("api-auth/", include("rest_framework.urls")),
     path(
         "swagger/output.json/",
         schema_view.without_ui(cache_timeout=0),
@@ -58,6 +58,5 @@ urlpatterns = [
         schema_view.with_ui("redoc", cache_timeout=0),
         name="schema-redoc",
     ),
-
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -8,10 +8,8 @@ from django.contrib.auth.models import (
 from django.conf import settings
 
 
-
-
 def user_profile_image_path(instance, filename):
-    return f'profiles/user_{instance.user.id}/{filename}'
+    return f"profiles/user_{instance.user.id}/{filename}"
 
 
 class UserManager(BaseUserManager):
@@ -48,7 +46,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     """
 
     email = models.EmailField(max_length=255, unique=True)
-    phone = models.CharField(max_length=20, unique=True,null=True,blank=True)
+    phone = models.CharField(max_length=20, unique=True, null=True, blank=True)
 
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
@@ -67,13 +65,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-    
-    
-    
+
+
 class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,related_name='profile')
-    image = models.ImageField(upload_to=user_profile_image_path,blank=True,null=True)
-    location = models.CharField(max_length=250,blank=True)
-    
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
+    )
+    image = models.ImageField(upload_to=user_profile_image_path, blank=True, null=True)
+    location = models.CharField(max_length=250, blank=True)
+
     def __str__(self):
-        return f'Profile of {self.user.email}'
+        return f"Profile of {self.user.email}"
