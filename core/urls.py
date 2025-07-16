@@ -22,7 +22,7 @@ from django.conf import settings
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-
+from core.views import api_root
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -42,6 +42,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("ctegory/", include("category.urls")),
+    path('', api_root),
+    path("blog/", include("blog.urls")),
     path("api-auth/", include("rest_framework.urls")),
     path(
         "swagger/output.json/",

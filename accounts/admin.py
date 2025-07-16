@@ -2,10 +2,14 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 from .models import CustomUser, Profile
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 
 @admin.register(CustomUser)
 class UserAdmin(BaseUserAdmin):
+    add_form = CustomUserCreationForm   # ← این دو خط مهم هستند
+    form = CustomUserChangeForm         # ←
+
     ordering = ["email"]
     list_display = ["id", "email", "phone", "first_name", "is_staff", "is_active"]
     search_fields = ["email", "phone", "first_name", "last_name"]
@@ -39,7 +43,7 @@ class UserAdmin(BaseUserAdmin):
             {
                 "classes": ("wide",),
                 "fields": (
-                    "id" "email",
+                    "email",
                     "phone",
                     "first_name",
                     "last_name",
@@ -52,7 +56,6 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
     )
-
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
