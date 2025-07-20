@@ -44,6 +44,7 @@ urlpatterns = [
     path("ctegory/", include("category.urls")),
     path('', api_root),
     path("blog/", include("blog.urls")),
+    path("chat/", include("chat.urls", namespace='chat')),
     path("api-auth/", include("rest_framework.urls")),
     path(
         "swagger/output.json/",

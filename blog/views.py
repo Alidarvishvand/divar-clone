@@ -4,8 +4,8 @@ from .serializers import PostSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from .serializers import PROVINCE_CHOICES
 
-from django.views.generic.detail import DetailView
 
 
 class PostCreateView(generics.CreateAPIView):
@@ -20,6 +20,13 @@ class PostCreateView(generics.CreateAPIView):
             openapi.Parameter('title', openapi.IN_FORM, type=openapi.TYPE_STRING),
             openapi.Parameter('description', openapi.IN_FORM, type=openapi.TYPE_STRING),
             openapi.Parameter('price', openapi.IN_FORM, type=openapi.TYPE_INTEGER),
+            openapi.Parameter(
+                'province',
+                openapi.IN_FORM,
+                type=openapi.TYPE_STRING,
+                enum=[p[0] for p in PROVINCE_CHOICES],
+            ),
+            
             openapi.Parameter('category', openapi.IN_FORM, type=openapi.TYPE_INTEGER),
             openapi.Parameter(
                 'images',

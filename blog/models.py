@@ -12,6 +12,8 @@ class Post(models.Model):
     category = models.ForeignKey(Category,on_delete=models.CASCADE)
     title = models.CharField(max_length=50, blank=False, null=False)
     description = models.CharField(max_length=255,blank=False, null=False)
+    province = models.CharField(max_length=50, default="تهران")
+    city = models.CharField(max_length=50, default="تهران") 
     price = models.PositiveIntegerField()
     createda_at = models.DateTimeField(auto_now_add=True)
     is_approved = models.BooleanField(default=False)

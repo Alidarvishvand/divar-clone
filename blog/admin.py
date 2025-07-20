@@ -1,5 +1,8 @@
 from django.contrib import admin
 from .models import Post, PostImage
+from .forms import PostAdminForm
+
+
 
 class PostImageInline(admin.TabularInline):
     model = PostImage
@@ -8,7 +11,8 @@ class PostImageInline(admin.TabularInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['id','title', 'user', 'user_phone', 'category', 'price', 'is_approved']
+    form = PostAdminForm 
+    list_display = ['id','title', 'user', 'user_phone', 'category','province','price', 'is_approved']
     list_filter = ['is_approved', 'category']
     readonly_fields = ['user_phone']
     actions = ['approve_selected']
@@ -16,7 +20,7 @@ class PostAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (None, {
-            'fields': ('user', 'user_phone', 'category', 'title', 'description', 'price', 'is_approved')
+            'fields': ('user', 'user_phone', 'category', 'title', 'description', 'price','province' ,'is_approved')
         }),
     )
 
@@ -27,3 +31,9 @@ class PostAdmin(admin.ModelAdmin):
     def approve_selected(self, request, queryset):
         queryset.update(is_approved=True)
     approve_selected.short_description = "تایید آگهی‌های انتخاب شده"
+
+
+
+
+
+admin.site.register(PostImage)
