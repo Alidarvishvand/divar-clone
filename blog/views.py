@@ -1,12 +1,12 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions,filters
 from .models import Post,PostImage
 from .serializers import PostSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .serializers import PROVINCE_CHOICES
-
-
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import PostFilter
 
 class PostCreateView(generics.CreateAPIView):
     queryset = Post.objects.all()
@@ -63,3 +63,15 @@ class PostDetailView(generics.RetrieveAPIView):
     serializer_class = PostSerializer
     permission_classes = [permissions.AllowAny]
     
+    
+
+
+
+
+class PostListAPIView(generics.ListAPIView):
+    queryset = Post.objects.filter(is_approved=True).order_by('-createda_at')
+    serializer_class = PostSerializer
+
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_class = PostFilter
+    search_fields = ['title', 'description']

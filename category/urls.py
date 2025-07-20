@@ -1,4 +1,4 @@
-# urls.py (داخل اپ category)
+
 from rest_framework.routers import DefaultRouter
 from .views import CategoryViewSet
 
