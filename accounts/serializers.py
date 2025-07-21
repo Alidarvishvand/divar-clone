@@ -11,20 +11,17 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-
-        fields = ["email", "phone", "password", "confirm_password"]
+        fields = ["email", "phone", "first_name", "last_name", "password", "confirm_password"]
 
     def validate(self, attrs):
-
         if attrs["password"] != attrs["confirm_password"]:
-            raise serializers.ValidationError(({"password dosnt match"}))
+            raise serializers.ValidationError({"password": "Passwords do not match"})
         validate_password(attrs["password"])
         return attrs
 
     def create(self, validated_data):
         password = validated_data.pop("password")
         validated_data.pop("confirm_password")
-
         user = CustomUser.objects.create_user(password=password, **validated_data)
         return user
 
@@ -44,9 +41,12 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(source='user.email', read_only=True)
+
     class Meta:
         model = Profile
-        fields = ["user", "image", "location"]
+        fields = ["email", "image", "location"]
+
 
 
 class ChangePasswordSerializer(serializers.Serializer):
