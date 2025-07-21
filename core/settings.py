@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     "accounts",
     "category",
     "blog",
-    "chat"
+    "chat",
+    'adminpanel',
 ]
 
 

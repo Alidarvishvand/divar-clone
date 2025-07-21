@@ -42,6 +42,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls",namespace='accounts')),
     path("ctegory/", include("category.urls",namespace='category')),
+    path("adminpanel/", include("adminpanel.urls",namespace='adminpanel')),
     path('', api_root),
     path("blog/", include("blog.urls",namespace='blog')),
     path("chat/", include("chat.urls", namespace='chat')),
